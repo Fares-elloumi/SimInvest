@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  cashBalance  Decimal  @default(100000) @db.Decimal(18, 2)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  holdings           Holding[]
+  transactions       Transaction[]
+  portfolioSnapshots PortfolioSnapshot[]
+}
+
+model Asset {
+  id          String   @id @default(cuid())
+  coingeckoId String   @unique
+  symbol      String   @unique
+  name        String
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  holdings     Holding[]
+  transactions Transaction[]
+  priceCache   AssetPriceCache?
+}
+
+model Holding {
+  id              String   @id @default(cuid())
+  userId          String
+  assetId         String
+  quantity        Decimal  @db.Decimal(30, 12)
+  averageBuyPrice Decimal  @db.Decimal(18, 2)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, assetId])
+}
+
+model Transaction {
+  id        String          @id @default(cuid())
+  userId    String
+  assetId   String
+  type      TransactionType
+  quantity  Decimal         @db.Decimal(30, 12)
+  priceSek  Decimal         @db.Decimal(18, 2)
+  totalSek  Decimal         @db.Decimal(18, 2)
+  createdAt DateTime        @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+}
+
+model AssetPriceCache {
+  id        String   @id @default(cuid())
+  assetId   String   @unique
+  priceSek  Decimal  @db.Decimal(18, 2)
+  change24h Decimal? @db.Decimal(10, 4)
+  updatedAt DateTime @updatedAt
+
+  asset Asset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+}
+
+model PortfolioSnapshot {
+  id            String   @id @default(cuid())
+  userId        String
+  totalValueSek Decimal  @db.Decimal(18, 2)
+  cashBalance   Decimal  @db.Decimal(18, 2)
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionType {
+  BUY
+  SELL
+}
