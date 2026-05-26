@@ -9,9 +9,13 @@ export default function Home() {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex h-screen">
-      <div className="w-full flex items-center justify-center bg-gradient-to-br from-space-dark via-space-teal to-space-dark">
-        <div className="w-full max-w-sm mx-auto bg-white p-4 border border-gray-300 rounded shadow">
+    <div className="flex">
+      <div className="w-full p-10 flex flex-col items-center gap-6 bg-gradient-to-br from-space-dark via-space-teal to-space-dark">
+        <div className="flex flex-col items-center text-center w-full md:mx-auto md:items-start text-space-light gap-4">
+          <h1 className="text-3xl font-bold text-space-light">Lär dig investering utan risk med <span className="text-white">100 000 SEK</span> i demokapital</h1>
+          <h2 className="text-space-light mb-4">Upplev spänningen i investeringsmarknaden utan att riskera riktiga pengar. Vår simulator ger dig realtidsdata och verktygen du behöver för att bli en expert.</h2>
+        </div>
+        <div className="w-full md:max-w-sm mx-auto bg-white p-4 border border-gray-300 rounded shadow">
           <div className="text-xl font-bold mb-4">
             <button className={`w-[50%] p-2 cursor-pointer ${isLogin ? 'border-b-2 border-space-dark text-space-dark' : 'border-b-2 border-gray-400 text-gray-400'}`} onClick={() => setIsLogin(true)}>
               Logga in
