@@ -2,8 +2,8 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <footer className="w-full bg-space-dark text-space-light">
-      <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+    <footer className="w-full bg-space-dark text-space-light px-10">
+      <div className="max-w-6xl mx-auto py-8 md:py-12">
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           

@@ -15,8 +15,8 @@ function Accordion() {
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-6">Vanliga frågor</h2>
+        <div className="w-full p-10">
+            <h2 className="text-3xl font-bold text-center mb-16 md:text-4xl lg:text-left ">Vanliga frågor</h2>
             <ul className="space-y-4">
                 {faqItems.map((item) => {
                     const isOpen = openId.includes(item.id);
