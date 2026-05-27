@@ -37,7 +37,7 @@ function Navbar() {
   }, [pathname]);
 
   return (
-    <nav className="flex items-center gap-8 justify-end bg-space-dark text-white fixed p-4 top-0 left-0 w-full z-20">
+    <nav className="flex items-center gap-8 justify-end bg-space-dark text-white fixed p-2 top-0 left-0 w-full z-20 border-b border-space-light lg:p-4">
       <div className="flex items-center gap-8 hidden lg:flex">
         {!user && (
           <>
