@@ -1,6 +1,42 @@
+"use client";
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+}
+
 
 function Footer() {
+
+  const [user, setUser] = useState<User | null>(null);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch("/api/auth/me");
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        setUser(null);
+      }
+    }
+
+    fetchUser();
+
+  }, [pathname]);
+
   return (
     <footer className="w-full bg-space-dark text-space-light px-10">
       <div className="max-w-6xl mx-auto py-8 md:py-12">
@@ -17,15 +53,27 @@ function Footer() {
           <div className="flex flex-col gap-2">
             <h3 className="text-white font-semibold text-base">Navigering</h3>
             <ul className="space-y-2 text-sm">
+              {!user && (
+                <li>
+                  <Link href="/" className="hover:text-white transition-colors">Hem</Link>
+                </li>
+              )}
+              
               <li>
-                <Link href="/" className="hover:text-white transition-colors">Hem</Link>
+                <Link href="/about" className="hover:text-white transition-colors">Om oss</Link>
               </li>
-              <li>
-                <Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
-              </li>
-              <li>
-                <Link href="/market" className="hover:text-white transition-colors">Marknad</Link>
-              </li>
+
+              {/* Visas bara om användaren ÄR inloggad */}
+              {user && (
+                <>
+                  <li>
+                    <Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
+                  </li>
+                  <li>
+                    <Link href="/market" className="hover:text-white transition-colors">Marknad</Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
 
