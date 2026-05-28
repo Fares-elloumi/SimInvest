@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import Logout from '../auth/Logout';
 
 interface User {
   id: string;
@@ -37,8 +38,9 @@ function Navbar() {
   }, [pathname]);
 
   return (
-    <nav className="flex items-center gap-8 justify-end bg-space-dark text-white fixed p-2 top-0 left-0 w-full z-20 border-b border-space-light lg:p-4">
-      <div className="flex items-center gap-8 hidden lg:flex">
+    <nav className="flex items-center gap-8 justify-end bg-space-dark text-white fixed px-10 top-0 left-0 w-full h-[56px] z-20 border-b border-space-light">
+      <img src="/logo.svg" alt="Logo" className="w-[140px] absolute left-10 top-1.5" />
+      <div className="flex items-center gap-10 hidden lg:flex">
         {!user && (
           <>
             <Link href="/">Hem</Link>
@@ -48,14 +50,20 @@ function Navbar() {
         <Link href="/about">Om oss</Link>
 
         {user && (
-          <>
-            <Link href="/dashboard">Dashboard</Link>
-            <Link href="/market">Marknad</Link>
-          </>
+          <div className="flex items-center gap-10">
+              <div className="flex items-center gap-10">
+              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/market">Marknad</Link>
+            </div>
+            <div className="inline-flex items-center gap-10">
+              <span className="w-[1px] h-6 bg-white"></span>
+            <Logout /> 
+           </div>
+          </div>
         )}
       </div>
       <button className="lg:hidden cursor-pointer">
-        <img src="/hamburger-menu.svg" alt="Menu" className="w-[40px]" />
+        <img src="/hamburger-menu.svg" alt="Menu" className="w-[24px]" />
       </button>
     </nav>
   );

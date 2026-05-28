@@ -27,7 +27,7 @@ function Logout() {
 
   return (
     <div>
-        <button className="bg-space-dark text-white p-2 rounded cursor-pointer" onClick={handleLogout}>
+        <button className="text-white cursor-pointer" onClick={handleLogout}>
             Logga ut
         </button>
     </div>
