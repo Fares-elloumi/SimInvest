@@ -13,7 +13,6 @@ type RouteContext = {
 export async function GET(req: NextRequest, context: RouteContext) {
     try {
         const { id } = await context.params;
-
         const searchParams = req.nextUrl.searchParams;
         const daysParam = searchParams.get("days") ?? "7";
         const days = Number(daysParam);
