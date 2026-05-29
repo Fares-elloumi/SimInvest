@@ -33,7 +33,7 @@ function AssetTable({ assets }: AssetTableProps) {
                        <td className="flex items-center gap-4 p-4">
                             <img src={asset.imageUrl} alt={asset.name} className="w-10 h-10 rounded-full" />
                             <div className="flex flex-col">
-                                <span className="font-bold">{asset.name.toUpperCase()}</span>
+                                <span className="font-bold capitalize">{asset.name}</span>
                                 <span className="text-sm text-gray-500">{asset.symbol.toUpperCase()}</span>
                             </div>
                         </td>

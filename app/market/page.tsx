@@ -2,6 +2,7 @@
 
 import AssetTable from "@/components/market/AssetTable";
 import { useState, useEffect } from "react";
+import AssetCard from "@/components/market/AssetCard";
 
 interface CryptoAsset {
   id: string;
@@ -49,10 +50,31 @@ function page() {
       return <p className="text-center mt-10">Laddar marknadsdata...</p>;
   }
 
+  const sortedAssets = assets && assets.length > 0 ? [...assets].sort((a, b) => {
+
+    const changeA = a.change24h ? parseFloat(a.change24h) : 0;
+    const changeB = b.change24h ? parseFloat(b.change24h) : 0;
+    return changeB - changeA;
+    
+  }) : [];
+
+  const topAsset = sortedAssets.length > 0 ? sortedAssets[0] : null;
+  const topLoser = sortedAssets.length > 0 ? sortedAssets[sortedAssets.length - 1] : null;
+
+  const topAssetChange = topAsset && topAsset.change24h ? parseFloat(topAsset.change24h) : 0;
+  const topLoserChange = topLoser && topLoser.change24h ? parseFloat(topLoser.change24h) : 0;
+
+  const topAssetText = topAssetChange >= 0 ? "Dagens vinnare" : "Minst nedgång";
+  const topLoserText = topLoserChange < 0 ? "Dagens förlorare" : "Minst uppgång";
+
   return (
     <div className="p-10 flex flex-col gap-6">
         <h1 className="text-3xl font-bold text-left lg:text-5xl">Marknad</h1>
         <p className="lg:text-xl">Här finner du realtidspriser för olika kryptovalutor.</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <AssetCard text={topAssetText} Asset={topAsset} AssetChange={topAssetChange} />
+          <AssetCard text={topLoserText} Asset={topLoser} AssetChange={topLoserChange} />
+        </div>
         <AssetTable assets={assets} />
         {error && <p className="text-red-500 text-center">{error}</p>}
     </div>
