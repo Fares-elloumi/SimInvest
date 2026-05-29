@@ -1,52 +1,20 @@
-"use client";
-
-import {useEffect, useState} from "react";
-
 interface CryptoAsset {
-    id: string;
-    coingeckoId: string;
-    symbol: string;
-    name: string;
-    imageUrl: string;
-    priceSek: string | null;
-    change24h: string | null;
-    priceUpdatedAt: Date | null;
-    source: string;
+  id: string;
+  coingeckoId: string;
+  symbol: string;
+  name: string;
+  imageUrl: string;
+  priceSek: string | null;
+  change24h: string | null;
+  priceUpdatedAt: Date | null;
+  source: string;
 }
 
-function AssetTable() {
+interface AssetTableProps {
+  assets: CryptoAsset[];
+}
 
-    const [assets, setAssets] = useState<CryptoAsset[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        
-        const fetchAssets = async () => {
-            try {
-                const response = await fetch("/api/assets/prices");
-
-                if(!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-                setAssets(data.data);
-
-            } catch (error) {
-                console.error("Error fetching assets:", error);
-                setError("Kunde inte hämta prisdata.");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchAssets();
-
-    }, []);
-
-    if (loading) {
-        return <p className="text-center mt-10">Laddar marknadsdata...</p>;
-    }
+function AssetTable({ assets }: AssetTableProps) {
 
   return (
     <div>
@@ -77,7 +45,6 @@ function AssetTable() {
                 ))}
             </tbody>
         </table>
-        {error && <p className="text-red-500 text-center">{error}</p>}
     </div>
   );
 }
