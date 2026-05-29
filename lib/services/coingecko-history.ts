@@ -33,7 +33,6 @@ export async function fetchCoinPriceHistory(
             cache: "no-store",
         }
     );
-
     if (!response.ok) {
         throw new Error(`CoinGecko svarade med status ${response.status}`);
     }
@@ -44,7 +43,6 @@ export async function fetchCoinPriceHistory(
     // Här gör vi om datan till objekt som passar bättre för Recharts.
     return data.prices.map(([timestamp, price]) => {
         const date = new Date(timestamp);
-
         return {
             timestamp,
             date: date.toLocaleDateString("sv-SE"),
