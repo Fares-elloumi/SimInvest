@@ -5,6 +5,7 @@ type CoinGeckoMarketChartResponse = {
 export type PriceHistoryPoint = {
     timestamp: number;
     date: string;
+    time: string;
     price: number;
 };
 
@@ -46,6 +47,10 @@ export async function fetchCoinPriceHistory(
         return {
             timestamp,
             date: date.toLocaleDateString("sv-SE"),
+            time: date.toLocaleTimeString("sv-SE", {
+                hour: "2-digit",
+                minute: "2-digit",
+            }),
             price: Number(price.toFixed(2)),
         };
     });
