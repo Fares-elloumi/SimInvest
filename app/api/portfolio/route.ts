@@ -36,3 +36,53 @@ async function getUserIdFromToken(req: NextRequest) {
     }
 }
 
+export async function GET(req: NextRequest) {
+    try {
+        // Kontrollerar att användaren är inloggad.
+        const userId = await getUserIdFromToken(req);
+
+        if (!userId) {
+            return NextResponse.json(
+                { error: "Du måste vara inloggad för att se portföljen." },
+                { status: 401 }
+            );
+        }
+
+        // Uppdaterar pris-cache om priset är gammalt eller saknas.
+        await getPricesWithCache();
+
+        // Hämtar användaren med saldo och alla innehav.
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId,
+            },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                cashBalance: true,
+                holdings: {
+                    include: {
+                        asset: {
+                            include: {
+                                priceCache: true,
+                            },
+                        },
+                    },
+                    orderBy: {
+                        updatedAt: "desc",
+                    },
+                },
+            },
+        });
+
+        if (!user) {
+            return NextResponse.json(
+                { error: "Användaren hittades inte." },
+                { status: 404 }
+            );
+        }
+
+
+    }
+}
