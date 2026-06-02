@@ -88,6 +88,7 @@ export async function GET(req: NextRequest) {
 
         const holdings = user.holdings.map((holding) => {
             const currentPrice = holding.asset.priceCache?.priceSek ?? null;
+
             // Om pris saknas använder vi 0 som aktuellt värde.
             const currentValueSek = currentPrice
                 ? holding.quantity.mul(currentPrice)
@@ -123,6 +124,39 @@ export async function GET(req: NextRequest) {
             };
         });
 
+        const totalPortfolioValueSek = user.cashBalance.add(totalHoldingsValueSek);
+        const totalProfitLossSek = totalHoldingsValueSek.sub(totalInvestedSek);
 
+        const totalProfitLossPercent = totalInvestedSek.gt(0)
+            ? totalProfitLossSek.div(totalInvestedSek).mul(100)
+            : new Prisma.Decimal(0);
+
+        return NextResponse.json({
+            success: true,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+            },
+            summary: {
+                cashBalance: user.cashBalance.toString(),
+                totalHoldingsValueSek: totalHoldingsValueSek.toString(),
+                totalPortfolioValueSek: totalPortfolioValueSek.toString(),
+                totalInvestedSek: totalInvestedSek.toString(),
+                totalProfitLossSek: totalProfitLossSek.toString(),
+                totalProfitLossPercent: totalProfitLossPercent.toFixed(2),
+            },
+            holdings,
+        });
+    } catch (error) {
+        console.error("Kunde inte hämta portfölj:", error);
+
+        return NextResponse.json(
+            {
+                success: false,
+                error: "Kunde inte hämta portfölj.",
+            },
+            { status: 500 }
+        );
     }
 }
