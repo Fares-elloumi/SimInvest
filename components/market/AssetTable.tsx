@@ -1,3 +1,8 @@
+"use client";
+
+import AssetModal from "@/components/market/AssetModal";
+import { useState } from "react";
+
 interface CryptoAsset {
   id: string;
   coingeckoId: string;
@@ -16,6 +21,9 @@ interface AssetTableProps {
 
 function AssetTable({ assets }: AssetTableProps) {
 
+    const [selectedAsset, setSelectedAsset] = useState<CryptoAsset | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
         <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden mt-10">
@@ -29,7 +37,10 @@ function AssetTable({ assets }: AssetTableProps) {
 
             <tbody>
                 {Array.isArray(assets) && assets.map((asset) => (
-                    <tr className="hover:bg-gray-100 cursor-pointer text-left border-b border-gray-300" key={asset.id}>
+                    <tr className="hover:bg-gray-100 cursor-pointer text-left border-b border-gray-300" key={asset.id} onClick={() => {
+                        setSelectedAsset(asset);
+                        setIsOpen(true);
+                    }}>
                        <td className="flex items-center gap-4 p-4">
                             <img src={asset.imageUrl} alt={asset.name} className="w-10 h-10 rounded-full" />
                             <div className="flex flex-col">
@@ -45,6 +56,13 @@ function AssetTable({ assets }: AssetTableProps) {
                 ))}
             </tbody>
         </table>
+        
+        {isOpen && selectedAsset && (
+            <AssetModal Asset={selectedAsset} onClose={() => {
+                setIsOpen(false);
+                setSelectedAsset(null);
+            }} />
+        )}
     </div>
   );
 }
