@@ -1,6 +1,7 @@
 "use client";
 
 import PriceGraph from "@/components/market/PriceGraph";
+import Buyasset from "@/components/market/BuyAssset";
 
 interface CryptoAsset {
   id: string;
@@ -41,7 +42,10 @@ function AssetModal({ Asset, onClose }: AssetModalProps) {
           </span>
         </div>
 
-        <PriceGraph Asset={Asset} />
+        <div className="flex flex-col gap-6 lg:flex-row">
+          <PriceGraph Asset={Asset} />
+          <Buyasset Asset={Asset} />
+        </div>
       </div>
     </div>
   );

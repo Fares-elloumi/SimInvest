@@ -44,6 +44,12 @@ function page() {
     };
     fetchAssets();
 
+    const interval = setInterval(() => {
+        fetchAssets();
+    }, 3600000);         // Uppdatera var 60:e minut, ändras till 60000 för varje minut när klart
+
+    return () => clearInterval(interval);
+
   }, []);
 
   if (loading) {
