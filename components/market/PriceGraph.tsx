@@ -60,7 +60,7 @@ function PriceGraph({ Asset }: { Asset: CryptoAsset }) {
     }, [days, Asset.id]);
 
   return (
-    <div className="bg-gray-500/10 p-4">
+    <div className="bg-gray-500/10 p-4 min-w-[65%] rounded-md">
         <div className="flex gap-4 mb-4 mr-6 justify-end">
             <button className={`${days === 1 ? 'bg-space-teal text-white' : ''} px-2 py-1 rounded cursor-pointer`} onClick={() => setDays(1)}>24 h</button>
             <button className={`${days === 7 ? 'bg-space-teal text-white' : ''} px-2 py-1 rounded cursor-pointer`} onClick={() => setDays(7)}>7 dagar</button>
