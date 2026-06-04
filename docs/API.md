@@ -575,3 +575,39 @@ Om användaren inte har några transaktioner returneras en tom lista:
 Om användaren inte är inloggad returneras status `401`.
 
 Frontend kan använda denna endpoint för att visa en transaktionstabell på Dashboard eller Portfolio-sidan med köp, sälj, datum, symbol, quantity, pris och totalbelopp.
+
+### Hämta portfolio snapshots
+
+```http
+GET /api/portfolio/snapshots
+```
+
+Kräver att användaren är inloggad.
+
+Den här endpointen returnerar sparade snapshots av användarens portföljvärde. En snapshot skapas efter köp och sälj. Varje snapshot sparar portföljens totala värde och användarens saldo vid den tidpunkten.
+
+Exempel på svar:
+
+```json
+{
+  "success": true,
+  "count": 2,
+  "data": [
+    {
+      "id": "snapshot-id",
+      "totalValueSek": "100000",
+      "cashBalance": "99000",
+      "createdAt": "2026-05-29T12:00:00.000Z"
+    },
+    {
+      "id": "snapshot-id",
+      "totalValueSek": "100050",
+      "cashBalance": "99350",
+      "createdAt": "2026-05-29T12:10:00.000Z"
+    }
+  ]
+}
+```
+
+Datan sorteras med äldst först eftersom den ska kunna användas i en graf över portföljens utveckling.
+
