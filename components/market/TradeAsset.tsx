@@ -133,12 +133,12 @@ function TradeAsset({ Asset }: TradeAssetProps) {
               {calcUnits ? (
                 <>
                   <label htmlFor="price" className="block text-sm font-medium">Antal enheter</label>
-                  <input type="text" id="price" name="price" readOnly cursor-not-allowed value={calculateUnits} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none" />
+                  <input type="text" id="price" name="price" readOnly value={calculateUnits} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none cursor-not-allowed" />
                 </>
               ) : (
                 <>
                   <label htmlFor="price" className="block text-sm font-medium">Totalt pris</label>
-                  <input type="text" id="price" name="price" readOnly cursor-not-allowed value={typeof calculatePrice === "number" ? calculatePrice.toFixed(2) : calculatePrice} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none" />
+                  <input type="text" id="price" name="price" readOnly value={typeof calculatePrice === "number" ? calculatePrice.toFixed(2) : calculatePrice} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none cursor-not-allowed" />
                 </>
               )}
             </div>
