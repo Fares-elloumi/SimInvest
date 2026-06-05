@@ -19,7 +19,7 @@ function PriceGraph({ Asset }: { Asset: CryptoAsset }) {
     const [days, setDays] = useState(7);
     const [chartData, setChartData] = useState<{ date: number; price: number }[]>([]);
     const [loading, setLoading] = useState(true);
-
+    
     const ticketCount = days === 1 ? 6 : days === 7 ? 7 : days === 30 ? 10 : 12;
 
     useEffect(() => {
