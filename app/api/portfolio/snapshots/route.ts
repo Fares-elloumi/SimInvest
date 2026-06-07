@@ -39,10 +39,27 @@ export async function GET(req: NextRequest) {
                 { status: 401 }
             );
         }
+
+        const { searchParams } = new URL(req.url);
+        const daysParam = searchParams.get("days");
+        const days = daysParam ? parseInt(daysParam, 10) : 7; // Defaultar till 7 dagar om inget anges
+
+        // 2. Räkna ut hur långt bak i tiden vi ska gå
+        const cutoffDate = new Date();
+        if (days === 1) {
+            // 24 timmar bakåt för "24 h"-knappen
+            cutoffDate.setHours(cutoffDate.getHours() - 24);
+        } else {
+            // X dagar bakåt för 7, 30, 365-knapparna
+            cutoffDate.setDate(cutoffDate.getDate() - days);
+        }
         // Hämtar snapshots för den inloggade användaren.
-        const snapshots = await prisma.portfolioSnapshot.findMany({
+        let snapshots = await prisma.portfolioSnapshot.findMany({
             where: {
                 userId,
+                createdAt: {
+                    gte: cutoffDate,
+                },
             },
             orderBy: {
                 createdAt: "asc",
@@ -54,6 +71,22 @@ export async function GET(req: NextRequest) {
                 createdAt: true,
             },
         });
+
+        if (snapshots.length === 0) {
+            const latestSnapshot = await prisma.portfolioSnapshot.findFirst({
+                where: { userId },
+                orderBy: { createdAt: "desc" },
+                select: {
+                    id: true,
+                    totalValueSek: true,
+                    cashBalance: true,
+                    createdAt: true,
+                },
+            });
+            if (latestSnapshot) {
+                snapshots = [latestSnapshot];
+            }
+        }
 
         const formattedSnapshots = snapshots.map((snapshot) => {
             return {

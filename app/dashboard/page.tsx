@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AssetModal from "@/components/market/AssetModal";
+import PriceGraph from "@/components/market/PriceGraph";
 
 interface CryptoAsset {
   id: string;
@@ -242,7 +243,9 @@ function DashboardPage() {
             </div>
           </div>
 
-          <h2 className="text-2xl font-bold mb-4">Mina Innehav</h2>
+          <PriceGraph />
+
+          <h2 className="text-2xl font-bold mb-4 mt-12">Mina Innehav</h2>
 
           {portfolio.holdings.length === 0 ? (
             <div className="bg-white shadow-md rounded-lg p-6">

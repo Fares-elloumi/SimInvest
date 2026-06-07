@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
-
 interface CryptoAsset {
   id: string;
   coingeckoId: string;
@@ -14,23 +13,34 @@ interface CryptoAsset {
   source: string;
 }
 
-function PriceGraph({ Asset }: { Asset: CryptoAsset }) {
+interface PriceGraphProps {
+  Asset?: CryptoAsset;
+}
+
+function PriceGraph({ Asset }: PriceGraphProps) {
 
     const [days, setDays] = useState(7);
-    const [chartData, setChartData] = useState<{ date: number; price: number }[]>([]);
+    const [chartData, setChartData] = useState<{ date: number; pris: number }[]>([]);
     const [loading, setLoading] = useState(true);
     
     const ticketCount = days === 1 ? 6 : days === 7 ? 7 : days === 30 ? 10 : 12;
 
     useEffect(() => {
 
+        let ignore = false;
         setLoading(true);
         
         try {
             const fetchPriceHistory = async () => {
+            
+                const endpoint = Asset 
+                    ? `/api/assets/${Asset.id}/history?days=${days}`
+                    : `/api/portfolio/snapshots?days=${days}`;
                 setLoading(true);
 
-                const response = await fetch(`/api/assets/${Asset.id}/history?days=${days}`);
+                const response = await fetch(endpoint, {
+                    credentials: "include",
+                });
 
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -40,14 +50,25 @@ function PriceGraph({ Asset }: { Asset: CryptoAsset }) {
 
                 console.log("Pris historik:", data);
 
-                const formattedData = data.data.map((item: { timestamp: number; price: number; time: number }) => ({
-                    date: item.timestamp,
-                    pris: item.price,
-                    time: item.time,
-                }));
+                const formattedData = data.data.map((item: any) => {
 
-                setChartData(formattedData);
-                setLoading(false);
+                    let timestamp = item.timestamp || item.time;
+                    if (!timestamp && item.createdAt) {
+                        timestamp = new Date(item.createdAt).getTime();
+                    }
+
+                    const value = item.price !== undefined ? item.price : item.totalValueSek;
+
+                    return {
+                        date: Number(timestamp || 0),
+                        pris: value ? parseFloat(value.toString()) : 0,
+                    };
+                });
+
+                if (!ignore) {
+                    setChartData(formattedData);
+                    setLoading(false);
+                }
             };
             fetchPriceHistory();
 
@@ -57,7 +78,7 @@ function PriceGraph({ Asset }: { Asset: CryptoAsset }) {
             setLoading(false);
         }
 
-    }, [days, Asset.id]);
+    }, [days, Asset?.id]);
 
   return (
     <div className="bg-gray-500/10 p-4 min-w-[65%] rounded-md">
@@ -127,6 +148,7 @@ function PriceGraph({ Asset }: { Asset: CryptoAsset }) {
                         minute: "2-digit",
                         })
                     }
+                    formatter={(value: any) => [`${parseFloat(value).toFixed(2)} SEK`, Asset ? "Pris" : "Portföljvärde"]}
                     />
 
                     <CartesianGrid strokeDasharray="3 3" />
