@@ -219,7 +219,7 @@ function DashboardPage() {
 
       {portfolio && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 lg:max-w-5xl">
             <div className="p-6 rounded-lg shadow-md border border-space-dark bg-space-dark">
               <p className="text-md text-white">Saldo</p>
               <p className="text-2xl font-bold text-white">
