@@ -75,17 +75,16 @@ function LoginForm() {
 
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : "Något gick fel";
+            const lowerMessage = errorMessage.toLocaleLowerCase();
             
-            if (errorMessage.toLowerCase().includes("e-postadress")) {
-                setErrors((prev) => ({
-                    ...prev,
-                    email: errorMessage
-                }));
+            if (lowerMessage.includes("epost") || lowerMessage.includes("e-post")) {
+                setErrors({ email: errorMessage });
+
+            } else if (lowerMessage.includes("lösenord")) {
+                setErrors({ password: errorMessage });
+                
             } else {
-                setErrors((prev) => ({
-                    ...prev,
-                    server: errorMessage
-                }));
+                setErrors({ server: errorMessage });
             }
         }
     }

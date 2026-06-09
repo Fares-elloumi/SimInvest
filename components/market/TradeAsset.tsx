@@ -28,11 +28,19 @@ function TradeAsset({ Asset }: TradeAssetProps) {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [step, setStep] = useState<"input" | "confirm" | "success">("input");
 
-  const calculateUnits = amount === "" ? "" : (parseFloat(amount) / (Asset.priceSek ? parseFloat(Asset.priceSek) : 1));
+const calculateUnits = amount === "" ? 0 : (
+  calcUnits 
+    ? (parseFloat(amount) / (Asset.priceSek ? parseFloat(Asset.priceSek) : 1))
+    : parseFloat(amount)
+);
 
-  const calculatePrice = amount === "" ? "" : (parseFloat(amount) * (Asset.priceSek ? parseFloat(Asset.priceSek) : 1));
+const calculatePrice = amount === "" ? 0 : (
+  calcUnits 
+    ? parseFloat(amount)
+    : (parseFloat(amount) * (Asset.priceSek ? parseFloat(Asset.priceSek) : 1))
+);
 
-  const amountSekToSend = calcUnits ? amount : (parseFloat(amount) * (Asset.priceSek ? parseFloat(Asset.priceSek) : 1));
+  const amountSekToSend = calculatePrice;
 
   const handleGoToReview = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,12 +141,12 @@ function TradeAsset({ Asset }: TradeAssetProps) {
               {calcUnits ? (
                 <>
                   <label htmlFor="price" className="block text-sm font-medium">Antal enheter</label>
-                  <input type="text" id="price" name="price" readOnly value={calculateUnits} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none cursor-not-allowed" />
+                  <input type="text" id="price" name="price" readOnly value={amount === "" ? "" : Number(calculateUnits)} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none cursor-not-allowed" />
                 </>
               ) : (
                 <>
                   <label htmlFor="price" className="block text-sm font-medium">Total kostnad</label>
-                  <input type="text" id="price" name="price" readOnly value={typeof calculatePrice === "number" ? calculatePrice.toFixed(2) : calculatePrice} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none cursor-not-allowed" />
+                  <input type="text" id="price" name="price" readOnly value={amount === "" ? "" : Number(calculatePrice).toFixed(2)} className="w-full border border-gray-500 rounded-md p-2 focus:outline-none cursor-not-allowed" />
                 </>
               )}
             </div>
