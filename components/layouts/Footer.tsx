@@ -44,7 +44,7 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           
           <div className="flex flex-col gap-2">
-            <h3 className="text-white font-semibold text-lg">KryptoSimulator</h3>
+            <h3 className="text-white font-semibold text-lg">SimInvest</h3>
             <p className="text-sm leading-relaxed max-w-sm">
               En utbildningsplattform för att lära sig kryptohandel helt riskfritt med virtuella pengar. Skapad som ett examensarbete av Niklas och Fares.
             </p>
