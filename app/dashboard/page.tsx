@@ -216,7 +216,7 @@ function DashboardPage() {
 
   return (
     <main className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <h1 className="text-4xl font-bold mb-8">Välkommen {portfolio?.user.name}</h1>
 
       {portfolio && (
         <>
