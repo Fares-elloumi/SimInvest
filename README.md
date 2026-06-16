@@ -8,7 +8,7 @@ I appen kan användaren skapa konto, logga in, se tillgängliga kryptovalutor, f
 
 Appen finns publicerad här:
 
-[Öppna SimInvest](siminvest-rouge.vercel.app)
+[Öppna SimInvest](https://siminvest-rouge.vercel.app/)
 
 ## Sammanfattning
 
